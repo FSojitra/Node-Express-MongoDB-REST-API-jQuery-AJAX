@@ -1,92 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>User Info</title>
+    <title>User Info</title>
     <style type="text/css">
-    body {
-        background-color: lightblue;
-    }
-</style>
-<link rel="stylesheet" href="stylesheets/style.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        body {
+            background-color: lightblue;
+        }
+    </style>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-</script>
-<script type="text/javascript">
-  $(document).ready(function(){
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(() => {
 
-    $( "#form1" ).submit(function(event) {
-        event.preventDefault();
+            $("#form1").submit((event) => {
+                event.preventDefault();
 
-        $.ajax({
-            type: 'POST',
-            url: '/',
-            data: $('#form1').serialize(),
-            dataType: "json",
-            success: function(response){
-                    //console.log('response');
-                    clearInputs();
-                    Show();
-                    //$( "#a" ).click();
-                },
-                error: function() {
-                }
-            })
-    });
-
-    $('table').on('click', '.update-button', function() {
-            //alert('asssaaa');
-            var rowEl = $(this).closest('tr');
-            var id = rowEl.find('.id').text();
-            var fullname = rowEl.find('.fullname').val();
-            var username = rowEl.find('.username').val();
-            var age = rowEl.find('.age').val();
-
-            $.ajax({
-                url: '/user/' + id,
-                method: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify({fullname: fullname, username: username,age: age}),
-                success: function(response) {
-                    console.log(response);
-                    $( "#a" ).click();
-                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/',
+                    data: $('#form1').serialize(),
+                    dataType: "json",
+                    success: (response) => {
+                        //console.log('response');
+                        clearInputs();
+                        Show();
+                        //$( "#a" ).click();
+                    },
+                    error: () => {
+                    }
+                })
             });
 
-        });
-    $('table').on('click', '.delete-button', function() {
-           // alert("DELETE");
-           var rowEl = $(this).closest('tr');
-           var id = rowEl.find('.id').text();
+            $('table').on('click', '.update-button', () => {
+                //alert('asssaaa');
+                var rowEl = $(this).closest('tr');
+                var id = rowEl.find('.id').text();
+                var fullname = rowEl.find('.fullname').val();
+                var username = rowEl.find('.username').val();
+                var age = rowEl.find('.age').val();
 
-           $.ajax({
-            url: '/user/' + id,
-            method: 'DELETE',
-            contentType: 'application/json',
-            success: function(response) {
-                console.log("response"+response);
-                $( "#a" ).click();
-            }
-        });
-       });
+                $.ajax({
+                    url: '/user/' + id,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ fullname: fullname, username: username, age: age }),
+                    success: (response) => {
+                        console.log(response);
+                        $("#a").click();
+                    }
+                });
 
-    $( "#a" ).click(function() {
-        Show();
-    });
-    function Show(){
-           // alert("Show");
-           $.ajax({
-            type: 'GET',
-            url: '/show',
-            dataType: "json",
-            success: function(response){
-                console.log(response);
-                var tbodyEl = $('tbody');
+            });
+            $('table').on('click', '.delete-button', () => {
+                // alert("DELETE");
+                var rowEl = $(this).closest('tr');
+                var id = rowEl.find('.id').text();
 
-                tbodyEl.html('');
+                $.ajax({
+                    url: '/user/' + id,
+                    method: 'DELETE',
+                    contentType: 'application/json',
+                    success: (response) => {
+                        console.log("response" + response);
+                        $("#a").click();
+                    }
+                });
+            });
 
-                response.forEach(function(product) {
-                    tbodyEl.append('\
+            $("#a").click(() => {
+                Show();
+            });
+            Show() => {
+                // alert("Show");
+                $.ajax({
+                    type: 'GET',
+                    url: '/show',
+                    dataType: "json",
+                    success: (response) => {
+                        console.log(response);
+                        var tbodyEl = $('tbody');
+
+                        tbodyEl.html('');
+
+                        response.forEach((product) => {
+                            tbodyEl.append('\
                         <tr>\
                         <td class="id">' + product.unique_id + '</td>\
                         <td><input type="text" class="fullname" value="' + product.fullname + '"></td>\
@@ -98,49 +100,50 @@
                         </td>\
                         </tr>\
                         ');
-                });
-            },
-            error: function() {
+                        });
+                    },
+                    error: () => {
+                    }
+                })
             }
-        })
-       }
 
-       function clearInputs(){
-        $("#username").val('');
-        $("#fullname").val('');
-        $("#age").val('');
-    }
+            clearInputs() => {
+                $("#username").val('');
+                $("#fullname").val('');
+                $("#age").val('');
+            }
 
 
-});
-</script>
+        });
+    </script>
 </head>
+
 <body>
     <button id="a">Show</button>
     <form id="form1" method="POST">
-      <label>UserName:</label><input type="text" name="username" id="username" required>
-      <br/>
-      <label>Fullname:</label><input type="text" name="fullname" id="fullname" required>
-      <br/>
-      <label>Age:</label><input type="Number" name="age" id="age" required>
-      <br/>
-      <button type="Submit" id="add">Submit</button>
-  </form>
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>FullName</th>
-                <th>UserName</th>
-                <th>Age</th>
-            </tr>
-        </thead>
-        <tbody>
+        <label>UserName:</label><input type="text" name="username" id="username" required>
+        <br />
+        <label>Fullname:</label><input type="text" name="fullname" id="fullname" required>
+        <br />
+        <label>Age:</label><input type="Number" name="age" id="age" required>
+        <br />
+        <button type="Submit" id="add">Submit</button>
+    </form>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>FullName</th>
+                    <th>UserName</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody>
 
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
